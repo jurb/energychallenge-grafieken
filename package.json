@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "d3": "^5.11.0",
+    "d3-svg-annotation": "^2.5.0",
     "sirv-cli": "^0.4.4"
   },
   "scripts": {
