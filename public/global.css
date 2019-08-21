@@ -140,14 +140,21 @@ svg {
   text-anchor: middle;
 }
 
-rect {
-  fill: lightgrey;
-  stroke: none;
-  opacity: 0.65;
+rect.inactive {
+  stroke: grey;
+  stroke-dasharray: 2 1;
+  fill: none;
+  opacity: 0.5;
 }
 
 rect.active {
   fill: #a11;
+  stroke: none;
+  opacity: 0.65;
+}
+
+rect.testweek {
+  fill: palegoldenrod;
   stroke: none;
   opacity: 0.65;
 }
@@ -157,5 +164,15 @@ rect.active {
   font-size: 0.725em;
   font-weight: 200;
 
+  text-anchor: middle;
+}
+
+.annotation-note-label {
+  font-size: 0.725em;
+  text-anchor: middle;
+}
+
+.annotation-note-title {
+  font-size: 0.725em;
   text-anchor: middle;
 }
