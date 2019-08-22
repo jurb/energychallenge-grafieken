@@ -4,7 +4,7 @@
   import { ticks, max, sum } from "d3-array";
   import { select } from "d3-selection";
   import { format } from "d3-format";
-  import { curveBasis } from "d3-shape";
+  import { line, curveBasis } from "d3-shape";
   import {
     annotation,
     annotationLabel,
@@ -14,14 +14,14 @@
 
   export let title = "";
 
-  const activeBars = ["Week 1"];
+  const activeBars = ["Week 1", "Week 2"];
 
   export let dataIncoming = [
-    { name: "Vergelijkingsweek", value: 16.5 },
-    { name: "Week 1", value: 13.6 },
+    { name: "Vorig jaar", value: 39.5 },
+    { name: "Week 1", value: 27.6 },
     { name: "Week 2", value: 17.4 },
-    { name: "Week 3", value: 14 },
-    { name: "Week 4", value: 13 }
+    { name: "Week 3", value: 14.0 },
+    { name: "Week 4", value: 13.1 }
   ];
 
   $: dataSum = sum(data, d => d.value);
@@ -31,7 +31,7 @@
 
   const data = dataIncoming.slice(1, 5);
 
-  const padding = { top: 45, right: 15, bottom: 30, left: 60 };
+  const padding = { top: 50, right: 10, bottom: 30, left: 50 };
 
   let width = 500;
   let height = 200;
@@ -40,10 +40,15 @@
     return activeBars.includes(name);
   }
 
+  $: xAll = scaleBand()
+    .domain(dataIncoming.map(d => d.name))
+    .range([padding.left + 50, width - padding.right])
+    .padding(0.3);
+
   $: x = scaleBand()
     .domain(data.map(d => d.name))
     .range([padding.left + 50, width - padding.right])
-    .padding(0.2);
+    .padding(0.3);
 
   $: y = scaleLinear()
     .domain([0, dataMax])
@@ -55,26 +60,26 @@
   $: barWidth = x.bandwidth();
 
   const type = annotationCustomType(annotationLabel, {
-    className: "custom"
-    // connector: { type: "curve", end: "arrow" }
+    className: "custom",
+    connector: { type: "curve", end: "arrow" }
     // note: { align: "dynamic" }
   });
 
   const annotations = [
-    {
-      note: {
-        title: `⚡ ${dataIncoming[0].value} kWh  ⚡`,
-        label: `Vergelijkingsmaand`,
-        align: "middle" //cf. right, middle, dynamic
-      },
-      data: {
-        name: "Test week",
-        value: dataIncoming[0].value + 1
-      },
-      x: 45,
-      dy: -20,
-      dx: 0
-    },
+    // {
+    //   note: {
+    //     title: `⚡ ${dataIncoming[0].value} kWh  ⚡`,
+    //     label: `Vergelijkingsmaand`,
+    //     align: "middle" //cf. right, middle, dynamic
+    //   },
+    //   data: {
+    //     name: "Test week",
+    //     value: dataIncoming[0].value + 1
+    //   },
+    //   x: 45,
+    //   dy: -20,
+    //   dx: 0
+    // },
     {
       note: {
         title: `⚡ ${dataIncoming[1].value} kWh ⚡`,
@@ -85,8 +90,8 @@
         name: "Week 1",
         value: dataIncoming[1].value + 1
       },
-      dy: -20,
-      dx: 0
+      dy: -40,
+      dx: 250
     }
   ];
 
@@ -103,6 +108,12 @@
   onMount(() => {
     select("#annotations").call(annotationGen);
   });
+
+  //   select("#annotations").call(annotationGen);
+
+  const linegen = line()
+    .x(d => xAll(d.name))
+    .y(d => y(d.value));
 </script>
 
 <style>
@@ -114,6 +125,48 @@
 <div class="chart" bind:clientWidth={width} bind:clientHeight={height}>
 
   <svg>
+
+    <!-- <g class="annotations-manual">
+
+      <path d={linegen(dataIncoming)} stroke="black" fill="none" />
+
+      <path
+        d={linegen([
+          { name: 'Vorig jaar', value: '39.5' },
+          { name: 'Week 1', value: '27.6' }
+        ])}
+        stroke="black"
+        fill="none" />
+
+      <line
+        x1="0"
+        y1="0"
+        x2="200"
+        y2="200"
+        style="stroke:rgb(255,0,0);stroke-width:2" />
+      <text />
+
+      <g class="annotation-note-content" transform="translate({width / 2}, 10)">
+        <rect
+          class="annotation-note-bg"
+          width="88.78125"
+          height="33.8328125"
+          x="-44.390625"
+          y="0"
+          fill="white"
+          fill-opacity="0" />
+        <text
+          class="annotation-note-label"
+          dx="0"
+          y="19.817187500000003"
+          fill="grey">
+          <tspan x="0" dy="0.8em">Week 1</tspan>
+        </text>
+        <text class="annotation-note-title" fill="grey" font-weight="bold">
+          <tspan x="0" dy="0.8em">⚡ 39.6 kWh ⚡</tspan>
+        </text>
+      </g>
+    </g> -->
 
     <!-- y axis -->
     <g class="axis y-axis" transform="translate(0,{padding.top})">
@@ -145,6 +198,12 @@
         width={barWidth - 4}
         height={height - padding.bottom - y(dataTestweek.value)}
         class="testweek" />
+      <text
+        class="testweek"
+        x={barWidth / 2 + 13}
+        y={y(dataTestweek.value) + 18}>
+        {dataTestweek.value}
+      </text>
 
       {#each data as dataPoint, i}
         <rect
@@ -153,19 +212,19 @@
           width={barWidth - 4}
           height={height - padding.bottom - y(dataPoint.value)}
           class={activeBar(dataPoint.name) ? 'active' : 'inactive'} />
-        <!-- <text
-          x={x1(dataPoint.name) + x1.bandwidth() / 2 - 3}
-          y={y(dataPoint.value) - 4}>
-          {dataPoint.value} ({dataPoint.percentage})
-        </text> -->
+        <text
+          x={x(dataPoint.name) + x.bandwidth() / 2 - 3}
+          y={y(dataPoint.value) + 18}>
+          {activeBar(dataPoint.name) ? dataPoint.value : '?'}
+        </text>
       {/each}
     </g>
 
     <g id="annotations" />
-
   </svg>
 </div>
 <!-- <button on:click={() => tweenedData.set(data2)}>data2</button> -->
 <!-- {activeBar('1990')} -->
 <!-- {annotationGen()} -->
-{dataTestweek} {y(dataTestweek)} {barWidth}
+<!-- {dataTestweek} {y(dataTestweek)} {barWidth} -->
+<!-- {dataMax} {dataMax} {linegen(dataIncoming)} -->

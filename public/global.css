@@ -35,7 +35,8 @@ body {
 }
 
 body {
-  color: rgb(30, 30, 30);
+  color: rgb(114, 114, 114);
+  fill: rgb(114, 114, 114);
   margin: 0;
   padding: 8px;
   box-sizing: border-box;
@@ -154,16 +155,16 @@ rect.active {
 }
 
 rect.testweek {
-  fill: palegoldenrod;
+  fill: lightgrey;
   stroke: none;
-  opacity: 0.65;
+  opacity: 0.95;
 }
 
 .bars text {
   font-family: "AvenirNextLTW01-Medium", Helvetica, Arial;
+  fill: white;
   font-size: 0.725em;
   font-weight: 200;
-
   text-anchor: middle;
 }
 
@@ -175,4 +176,9 @@ rect.testweek {
 .annotation-note-title {
   font-size: 0.725em;
   text-anchor: middle;
+}
+
+.bars text.testweek {
+  text-anchor: middle;
+  fill: grey;
 }
