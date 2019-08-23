@@ -107,14 +107,8 @@ h2 {
 
 .chart {
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
-}
-
-svg {
-  position: relative;
-  width: 100%;
-  height: 200px;
 }
 
 .tick {
@@ -124,13 +118,14 @@ svg {
 }
 
 .tick line {
-  stroke: #e2e2e2;
-  stroke-dasharray: 2;
+  stroke: red;
+  stroke-dasharray: 1;
+  opacity: 0.4;
 }
 
 .tick text {
   fill: rgb(114, 114, 114);
-  text-anchor: start;
+  text-anchor: middle;
 }
 
 .tick.tick-0 line {
@@ -143,7 +138,7 @@ svg {
 
 rect.inactive {
   stroke: grey;
-  stroke-dasharray: 2 1;
+  stroke-dasharray: 5 2;
   fill: none;
   opacity: 0.5;
 }
@@ -181,4 +176,8 @@ rect.testweek {
 .bars text.testweek {
   text-anchor: middle;
   fill: grey;
+}
+
+text.inactive {
+  fill: black;
 }

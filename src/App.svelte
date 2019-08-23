@@ -5,204 +5,145 @@
   import { select } from "d3-selection";
   import { format } from "d3-format";
   import { line, curveBasis } from "d3-shape";
-  import {
-    annotation,
-    annotationLabel,
-    annotationCallout,
-    annotationCustomType
-  } from "d3-svg-annotation";
 
-  export let title = "";
-
+  // Settings
   const activeBars = ["Week 1", "Week 2"];
+  const padding = { top: 120, right: 50, bottom: 90, left: 120 };
+  let width = 900;
+  let height = 500;
 
-  export let dataIncoming = [
-    { name: "Vorig jaar", value: 39.5 },
-    { name: "Week 1", value: 27.6 },
-    { name: "Week 2", value: 17.4 },
-    { name: "Week 3", value: 14.0 },
-    { name: "Week 4", value: 13.1 }
+  // Helpers
+  const activeBar = name => activeBars.includes(name);
+  const int = format(",.0f");
+  const params = new URLSearchParams(window.location.search);
+
+  // Default data, not used yet
+  export let dataDefault = [
+    { name: "Vorig jaar", value: 20 },
+    { name: "Week 1", value: 20 },
+    { name: "Week 2", value: 20 },
+    { name: "Week 3", value: 20 },
+    { name: "Week 4", value: 20 }
   ];
 
+  const barNames = ["Vorig jaar", "Week 1", "Week 2", "Week 3", "Week 4"];
+
+  const urlData = params
+    .get("data")
+    .split(",")
+    .map(Number);
+
+  $: dataAll = urlData.map((el, i) => ({
+    name: barNames[i],
+    value: el
+  }));
+
+  $: data = dataAll.slice(1, 5);
+  $: dataTestweek = dataAll[0];
+
+  // Data variables
   $: dataSum = sum(data, d => d.value);
-  $: dataMax = max(dataIncoming, d => d.value);
+  $: dataMax = max(dataAll, d => d.value);
 
-  $: dataTestweek = dataIncoming[0];
+  const linegen = line()
+    .x(d => x(d.name))
+    .y(d => y(d.value));
 
-  const data = dataIncoming.slice(1, 5);
+  const linegenTestweek = line()
+    .x(d => 60)
+    .y(d => y(d.value));
 
-  const padding = { top: 50, right: 10, bottom: 30, left: 50 };
-
-  let width = 500;
-  let height = 200;
-
-  function activeBar(name) {
-    return activeBars.includes(name);
-  }
-
-  $: xAll = scaleBand()
-    .domain(dataIncoming.map(d => d.name))
-    .range([padding.left + 50, width - padding.right])
-    .padding(0.3);
-
+  // Scales
   $: x = scaleBand()
     .domain(data.map(d => d.name))
-    .range([padding.left + 50, width - padding.right])
+    .range([padding.left + 60, width - padding.right]) // Offset of 60 pixels, manual first bar with more padding
     .padding(0.3);
 
   $: y = scaleLinear()
     .domain([0, dataMax])
-    .nice(5)
-    .range([height - padding.bottom, padding.top]);
+    // .nice(5)
+    .range([height - padding.bottom - 25, padding.top]); // Bars have a min height of 25px, for labels
 
   $: yTicks = y.ticks(5);
-
   $: barWidth = x.bandwidth();
-
-  const type = annotationCustomType(annotationLabel, {
-    className: "custom",
-    connector: { type: "curve", end: "arrow" }
-    // note: { align: "dynamic" }
-  });
-
-  const annotations = [
-    // {
-    //   note: {
-    //     title: `⚡ ${dataIncoming[0].value} kWh  ⚡`,
-    //     label: `Vergelijkingsmaand`,
-    //     align: "middle" //cf. right, middle, dynamic
-    //   },
-    //   data: {
-    //     name: "Test week",
-    //     value: dataIncoming[0].value + 1
-    //   },
-    //   x: 45,
-    //   dy: -20,
-    //   dx: 0
-    // },
-    {
-      note: {
-        title: `⚡ ${dataIncoming[1].value} kWh ⚡`,
-        label: `Week 1`,
-        align: "middle" //cf. right, middle, dynamic
-      },
-      data: {
-        name: "Week 1",
-        value: dataIncoming[1].value + 1
-      },
-      dy: -40,
-      dx: 250
-    }
-  ];
-
-  const annotationGen = annotation()
-    .type(annotationLabel)
-    .accessors({
-      x: d => x(d.name) + 30,
-      y: d => y(d.value)
-    })
-    .textWrap(250)
-    .type(type)
-    .annotations(annotations);
-
-  onMount(() => {
-    select("#annotations").call(annotationGen);
-  });
-
-  //   select("#annotations").call(annotationGen);
-
-  const linegen = line()
-    .x(d => xAll(d.name))
-    .y(d => y(d.value));
 </script>
 
 <style>
-
+  svg {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    border: 1px solid black;
+  }
 </style>
 
-<h2>{title}</h2>
+<div style="margin:100px" />
 
 <div class="chart" bind:clientWidth={width} bind:clientHeight={height}>
 
-  <svg>
+  <svg id="svg">
 
-    <!-- <g class="annotations-manual">
+    <g class="annotations-manual" style=" border: 1px solid black; ">
 
-      <path d={linegen(dataIncoming)} stroke="black" fill="none" />
+      <!-- <g class="pointer" transform="translate({padding.top}, {padding.left})">
+        <path
+          d="M {padding.left - 20}
+          {y(dataAll[0].value) - 5} C {padding.left - 20} 80 {padding.left - 20}
+          {padding.left - 20}
+          {width - padding.left - 30} 40"
+          style="stroke:grey;stroke-width:1;fill:transparent" />
+      </g> -->
 
-      <path
-        d={linegen([
-          { name: 'Vorig jaar', value: '39.5' },
-          { name: 'Week 1', value: '27.6' }
-        ])}
-        stroke="black"
-        fill="none" />
-
-      <line
-        x1="0"
-        y1="0"
-        x2="200"
-        y2="200"
-        style="stroke:rgb(255,0,0);stroke-width:2" />
-      <text />
-
-      <g class="annotation-note-content" transform="translate({width / 2}, 10)">
-        <rect
-          class="annotation-note-bg"
-          width="88.78125"
-          height="33.8328125"
-          x="-44.390625"
-          y="0"
-          fill="white"
-          fill-opacity="0" />
-        <text
-          class="annotation-note-label"
-          dx="0"
-          y="19.817187500000003"
-          fill="grey">
+      <g
+        class="annotation-note-content"
+        transform="translate({width - padding.left}, 25)">
+        <text class="annotation-note-label" dx="0" y="20" fill="grey">
           <tspan x="0" dy="0.8em">Week 1</tspan>
         </text>
         <text class="annotation-note-title" fill="grey" font-weight="bold">
-          <tspan x="0" dy="0.8em">⚡ 39.6 kWh ⚡</tspan>
+          <tspan x="0" dy="0.8em">⚡ {int(dataTestweek.value)} kWh ⚡</tspan>
         </text>
       </g>
-    </g> -->
+    </g>
 
     <!-- y axis -->
     <g class="axis y-axis" transform="translate(0,{padding.top})">
       <g
         class="tick"
-        transform="translate(0, {y(dataTestweek.value) - padding.top})">
+        transform="translate(0, {y(dataTestweek.value) - padding.top - 1})">
         <line x2="100%" />
-        <!-- <text y="-4">Gebruik in testweek</text> -->
       </g>
     </g>
 
     <!-- x axis -->
     <g class="axis x-axis">
       <g class="tick" transform="translate(15,{height})">
-        <text x={barWidth / 2.15} y="-10">{dataTestweek.name}</text>
+        <text x={padding.left - 42} y={-padding.bottom + 20}>
+          {dataTestweek.name}
+        </text>
       </g>
 
       {#each data as dataPoint, i}
         <g class="tick" transform="translate({x(dataPoint.name)},{height})">
-          <text x={barWidth / 2.15} y="-10">{dataPoint.name}</text>
+          <text x={barWidth / 2.15} y={-padding.bottom + 20}>
+            {dataPoint.name}
+          </text>
         </g>
       {/each}
     </g>
 
     <g class="bars">
       <rect
-        x="15"
+        x={padding.left - barWidth + 10}
         y={y(dataTestweek.value)}
         width={barWidth - 4}
         height={height - padding.bottom - y(dataTestweek.value)}
         class="testweek" />
       <text
         class="testweek"
-        x={barWidth / 2 + 13}
+        x={padding.left - 27}
         y={y(dataTestweek.value) + 18}>
-        {dataTestweek.value}
+        {int(dataTestweek.value)} kWh
       </text>
 
       {#each data as dataPoint, i}
@@ -213,9 +154,10 @@
           height={height - padding.bottom - y(dataPoint.value)}
           class={activeBar(dataPoint.name) ? 'active' : 'inactive'} />
         <text
+          class={activeBar(dataPoint.name) ? 'active' : 'inactive'}
           x={x(dataPoint.name) + x.bandwidth() / 2 - 3}
           y={y(dataPoint.value) + 18}>
-          {activeBar(dataPoint.name) ? dataPoint.value : '?'}
+          {activeBar(dataPoint.name) ? `${int(dataPoint.value)} kWh` : '?'}
         </text>
       {/each}
     </g>
