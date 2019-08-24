@@ -37,6 +37,7 @@ body {
 body {
   color: rgb(114, 114, 114);
   fill: rgb(114, 114, 114);
+  background-color: rgb(255, 255, 221);
   margin: 0;
   padding: 8px;
   box-sizing: border-box;
@@ -107,13 +108,12 @@ h2 {
 
 .chart {
   width: 100%;
-  max-width: 600px;
   margin: 0 auto;
 }
 
 .tick {
   font-family: "AvenirNextLTW01-Medium", Arial;
-  font-size: 0.725em;
+  font-size: 1.4em;
   font-weight: 400;
 }
 
@@ -158,18 +158,18 @@ rect.testweek {
 .bars text {
   font-family: "AvenirNextLTW01-Medium", Helvetica, Arial;
   fill: white;
-  font-size: 0.725em;
+  font-size: 1.4em;
   font-weight: 200;
   text-anchor: middle;
 }
 
 .annotation-note-label {
-  font-size: 0.725em;
+  font-size: 1.6em;
   text-anchor: middle;
 }
 
 .annotation-note-title {
-  font-size: 0.725em;
+  font-size: 1.6em;
   text-anchor: middle;
 }
 

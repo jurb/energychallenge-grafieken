@@ -5,12 +5,14 @@
   import { select } from "d3-selection";
   import { format } from "d3-format";
   import { line, curveBasis } from "d3-shape";
+  import saveAs from "file-saver";
+  import canvg from "canvg";
 
   // Settings
-  const activeBars = ["Week 1", "Week 2"];
-  const padding = { top: 120, right: 50, bottom: 90, left: 120 };
-  let width = 900;
-  let height = 500;
+  const activeBars = ["Week 1", ""];
+  const padding = { top: 250, right: 0, bottom: 120, left: 120 };
+  let width = 800;
+  let height = 800;
 
   // Helpers
   const activeBar = name => activeBars.includes(name);
@@ -66,75 +68,77 @@
 
   $: yTicks = y.ticks(5);
   $: barWidth = x.bandwidth();
+
+  onMount(() => {
+    var svg = document.querySelector("svg");
+    var canvas = document.createElement("canvas");
+    canvas.height = height;
+    canvas.width = width;
+    canvg(canvas, svg.parentNode.innerHTML.trim());
+    console.log(svg.parentNode.innerHTML.trim());
+    console.log(canvg(canvas, svg.parentNode.innerHTML.trim()));
+    // var dataURL = canvas.toDataURL("image/png");
+    // var data = atob(dataURL.substring("data:image/png;base64,".length)),
+    //   asArray = new Uint8Array(data.length);
+
+    // for (var i = 0, len = data.length; i < len; ++i) {
+    //   asArray[i] = data.charCodeAt(i);
+    // }
+
+    // var blob = new Blob([asArray.buffer], { type: "image/png" });
+    // saveAs(blob, "export_" + Date.now() + ".png");
+  });
 </script>
 
 <style>
   svg {
     position: relative;
-    width: 100%;
-    height: 500px;
+    width: 800px;
+    height: 800px;
     border: 1px solid black;
   }
 </style>
 
-<div style="margin:100px" />
-
-<div class="chart" bind:clientWidth={width} bind:clientHeight={height}>
-
+<div style="width: {width}; height: {height}">
   <svg id="svg">
 
-    <g class="annotations-manual" style=" border: 1px solid black; ">
+    <!-- annotations -->
+    <g class="annotations-manual">
+      <path
+        d="M {padding.left - 25}
+        {y(dataAll[0].value) - 5} C 100 50 {padding.left - 20}
+        {padding.left - 20}
+        {width / 2 - 100}
+        {padding.top - 80}"
+        style="stroke:grey;stroke-width:1;fill:transparent" />
 
-      <!-- <g class="pointer" transform="translate({padding.top}, {padding.left})">
-        <path
-          d="M {padding.left - 20}
-          {y(dataAll[0].value) - 5} C {padding.left - 20} 80 {padding.left - 20}
-          {padding.left - 20}
-          {width - padding.left - 30} 40"
-          style="stroke:grey;stroke-width:1;fill:transparent" />
-      </g> -->
+      <g transform="translate({width / 2 - 100},{padding.top - 130})">
+        <rect
+          class="annotation-note-bg"
+          width="200"
+          height="100"
+          x="0"
+          y="0"
+          fill="goldenrod"
+          fill-opacity="0.2" />
+      </g>
 
       <g
         class="annotation-note-content"
-        transform="translate({width - padding.left}, 25)">
-        <text class="annotation-note-label" dx="0" y="20" fill="grey">
-          <tspan x="0" dy="0.8em">Week 1</tspan>
+        transform="translate({width / 2}, {padding.top - 90})">
+        <text class="annotation-note-label" dx="0" y="30" fill="grey">
+          <tspan x="0" dy="0">Week 1</tspan>
         </text>
         <text class="annotation-note-title" fill="grey" font-weight="bold">
-          <tspan x="0" dy="0.8em">⚡ {int(dataTestweek.value)} kWh ⚡</tspan>
+          <tspan x="0" dy="0">⚡ {int(dataTestweek.value)} kWh ⚡</tspan>
         </text>
       </g>
     </g>
 
-    <!-- y axis -->
-    <g class="axis y-axis" transform="translate(0,{padding.top})">
-      <g
-        class="tick"
-        transform="translate(0, {y(dataTestweek.value) - padding.top - 1})">
-        <line x2="100%" />
-      </g>
-    </g>
-
-    <!-- x axis -->
-    <g class="axis x-axis">
-      <g class="tick" transform="translate(15,{height})">
-        <text x={padding.left - 42} y={-padding.bottom + 20}>
-          {dataTestweek.name}
-        </text>
-      </g>
-
-      {#each data as dataPoint, i}
-        <g class="tick" transform="translate({x(dataPoint.name)},{height})">
-          <text x={barWidth / 2.15} y={-padding.bottom + 20}>
-            {dataPoint.name}
-          </text>
-        </g>
-      {/each}
-    </g>
-
+    <!-- bars -->
     <g class="bars">
       <rect
-        x={padding.left - barWidth + 10}
+        x={padding.left - barWidth + 21}
         y={y(dataTestweek.value)}
         width={barWidth - 4}
         height={height - padding.bottom - y(dataTestweek.value)}
@@ -142,7 +146,7 @@
       <text
         class="testweek"
         x={padding.left - 27}
-        y={y(dataTestweek.value) + 18}>
+        y={y(dataTestweek.value) + 35}>
         {int(dataTestweek.value)} kWh
       </text>
 
@@ -156,13 +160,36 @@
         <text
           class={activeBar(dataPoint.name) ? 'active' : 'inactive'}
           x={x(dataPoint.name) + x.bandwidth() / 2 - 3}
-          y={y(dataPoint.value) + 18}>
+          y={y(dataPoint.value) + 35}>
           {activeBar(dataPoint.name) ? `${int(dataPoint.value)} kWh` : '?'}
         </text>
       {/each}
     </g>
 
-    <g id="annotations" />
+    <!-- y axis line -->
+    <g class="axis y-axis" transform="translate(0,{padding.top})">
+      <g
+        class="tick"
+        transform="translate(0, {y(dataTestweek.value) - padding.top - 1})">
+        <line x2={width} />
+      </g>
+    </g>
+
+    <!-- x axis bar labels -->
+    <g class="axis x-axis">
+      <g class="tick" transform="translate(15,{height})">
+        <text x={padding.left - 42} y={-padding.bottom + 35}>
+          {dataTestweek.name}
+        </text>
+      </g>
+      {#each data as dataPoint, i}
+        <g class="tick" transform="translate({x(dataPoint.name)},{height})">
+          <text x={barWidth / 2.15} y={-padding.bottom + 35}>
+            {dataPoint.name}
+          </text>
+        </g>
+      {/each}
+    </g>
   </svg>
 </div>
 <!-- <button on:click={() => tweenedData.set(data2)}>data2</button> -->
@@ -170,3 +197,4 @@
 <!-- {annotationGen()} -->
 <!-- {dataTestweek} {y(dataTestweek)} {barWidth} -->
 <!-- {dataMax} {dataMax} {linegen(dataIncoming)} -->
+<!-- {width} -->

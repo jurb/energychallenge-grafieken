@@ -12,8 +12,10 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "canvg": "^2.0.0",
     "d3": "^5.11.0",
     "d3-svg-annotation": "^2.5.0",
+    "file-saver": "^2.0.2",
     "save-svg-as-png": "^1.4.14",
     "sirv-cli": "^0.4.4"
   },
