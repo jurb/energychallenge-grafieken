@@ -147,6 +147,13 @@
           Jullie zitten nu 7% onder het jullie gebruik van vorig jaar.
         </tspan>
       </text>
+      <text
+        class="annotation-note-label"
+        dx="0"
+        y="30"
+        style="font-size:.9em; font-family: 'AvenirNextLTW01-Regular'">
+        <tspan x="0" dy="40">In Week 2 gebruikten jullie 5% minder.</tspan>
+      </text>
       <!-- <text class="annotation-note-title">
         <tspan x="0" dy="0">⚡ {int(dataTestweek.value)} kWh ⚡</tspan>
       </text> -->
