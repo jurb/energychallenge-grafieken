@@ -27,6 +27,22 @@
     url("../fonts/AvenirNextMedium/a89d6ad1-a04f-4a8f-b140-e55478dbea80.svg#a89d6ad1-a04f-4a8f-b140-e55478dbea80")
       format("svg");
 }
+
+@font-face {
+  font-family: "AvenirNextLTW01-Regular";
+  src: url("../fonts/AvenirNext/e9167238-3b3f-4813-a04a-a384394eed42.eot?#iefix");
+  src: url("../fonts/AvenirNext/e9167238-3b3f-4813-a04a-a384394eed42.eot?#iefix")
+      format("eot"),
+    url("../fonts/AvenirNext/2cd55546-ec00-4af9-aeca-4a3cd186da53.woff2")
+      format("woff2"),
+    url("../fonts/AvenirNext/1e9892c0-6927-4412-9874-1b82801ba47a.woff")
+      format("woff"),
+    url("../fonts/AvenirNext/46cf1067-688d-4aab-b0f7-bd942af6efd8.ttf")
+      format("truetype"),
+    url("../fonts/AvenirNext/52a192b1-bea5-4b48-879f-107f009b666f.svg#52a192b1-bea5-4b48-879f-107f009b666f")
+      format("svg");
+}
+
 html,
 body {
   position: relative;
@@ -36,7 +52,6 @@ body {
 
 body {
   color: rgb(114, 114, 114);
-  fill: rgb(114, 114, 114);
   background-color: rgb(255, 255, 221);
   margin: 0;
   padding: 8px;
@@ -113,14 +128,14 @@ h2 {
 
 .tick {
   font-family: "AvenirNextLTW01-Medium", Arial;
-  font-size: 1.4em;
+  font-size: 1em;
   font-weight: 400;
 }
 
 .tick line {
-  stroke: red;
+  stroke: #0d0d84;
   stroke-dasharray: 1;
-  opacity: 0.4;
+  opacity: 0.5;
 }
 
 .tick text {
@@ -136,48 +151,66 @@ h2 {
   text-anchor: middle;
 }
 
-rect.inactive {
+rect.unknown {
   stroke: grey;
   stroke-dasharray: 5 2;
   fill: none;
   opacity: 0.5;
 }
 
-rect.active {
-  fill: #a11;
+rect.known {
+  fill: #b11;
   stroke: none;
   opacity: 0.65;
 }
 
 rect.testweek {
-  fill: lightgrey;
+  fill: #ab9c9c;
   stroke: none;
   opacity: 0.95;
 }
 
+.inactive {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
 .bars text {
   font-family: "AvenirNextLTW01-Medium", Helvetica, Arial;
-  fill: white;
-  font-size: 1.4em;
+  fill: #faf9f9;
+  font-size: 1em;
   font-weight: 200;
   text-anchor: middle;
 }
 
 .annotation-note-label {
-  font-size: 1.6em;
+  font-size: 1.2em;
   text-anchor: middle;
 }
 
 .annotation-note-title {
-  font-size: 1.6em;
+  font-size: 1.2em;
   text-anchor: middle;
 }
 
 .bars text.testweek {
   text-anchor: middle;
-  fill: grey;
+  fill: #faf9f9;
 }
 
-text.inactive {
+text.unknown {
   fill: black;
 }
+
+.arrow {
+  stroke: grey;
+  stroke-width: 1;
+  fill: transparent;
+}
+
+/* mogelijke kleuren */
+/* limegroen: #85be4a */
+/* onze rood: #a11 */
