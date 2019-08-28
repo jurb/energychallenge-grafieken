@@ -78,7 +78,6 @@
   // $: yTicks = y.ticks(5);
   $: barWidthLeft = x2.bandwidth();
   $: barWidthRight = x.bandwidth();
-  d;
 
   // Settings
   const padding = { top: 240, right: 15, bottom: 120, left: 0 };
@@ -149,25 +148,10 @@
       <text class="annotation-note-label" dx="0" y="30">
         <tspan x="0" dy="40">In Week 2 gebruikten jullie 5% minder.</tspan>
       </text>
-      <!-- <text class="annotation-note-title">
-        <tspan x="0" dy="0">⚡ {int(dataLeft.value)} kWh ⚡</tspan>
-      </text> -->
     </g>
 
     <!-- bars -->
     <g class="bars">
-      <!-- <rect
-        x={padding.left - barWidthRight + 25}
-        y={y(dataLeft.value)}
-        width={barWidthRight - 4}
-        height={height - padding.bottom - y(dataLeft.value)}
-        class="testweek" />
-      <text
-        class="testweek"
-        x={padding.left - 14}
-        y={y(dataLeft.value) + 35}>
-        {int(dataLeft.value)} kWh
-      </text> -->
       {#each dataLeft as dataPoint, i}
         <rect
           x={x2(dataPoint.name)}
@@ -198,24 +182,9 @@
       {/each}
     </g>
 
-    <!-- {#each dataLeft as dataPoint, i}
-      <g class="tick" transform="translate({x2(dataPoint.name)},{height})">
-        <text
-          x={barWidthLeft / 2.15}
-          y={-padding.bottom + 35}
-          class="weekknown">
-          {dataPoint.name}
-        </text>
-      </g>
-    {/each} -->
-
     <!-- x axis bar labels -->
+    <!-- TODO: just use html for all labels, like we do on dataLeft -->
     <g class="axis x-axis">
-      <!-- <g class="tick" transform="translate(15,{height})">
-        <text x={padding.left - 30} y={-padding.bottom + 35}>
-          {dataLeft.name}
-        </text>
-      </g> -->
       {#each dataRight as dataPoint, i}
         <g class="tick" transform="translate({x(dataPoint.name)},{height})">
           <text x={barWidthRight / 2.15} y={-padding.bottom + 25}>
@@ -234,38 +203,11 @@
     </g>
   </svg>
 
-  <!-- {#each dataLeft as dataPoint, i}
-    <div class="tick" transform="translate({x2(dataPoint.name)},{height})">
-      <div x={barWidthLeft / 2.15} y={-padding.bottom + 35} class="weekknown">
-        {dataPoint.name}
-      </div>
-    </div>
-  {/each} -->
-
-  {#each dataLeft as d}
+<!-- x axis bar html labels -->
+{#each dataLeft as d}
     <div
       style="position: absolute; top: {height - padding.bottom + 30}px; left: {x2(d.name)}px;
       ; width: 100px ; text-align: center">
       {d.name}
     </div>
   {/each}
-
-</div>
-url week number: {urlWeekNumber} urldata: {urlData}
-<br />
-<br />
-{#each dataLeft as d}
-  {d.name}, {d.value}
-  <br />
-{/each}
-90% van testverbruik: {defaultAmount}
-<br />
-<br />
-{#each dataRight as d}
-  {d.name}, {d.value}
-  <br />
-{/each}
-{x('Week 1')}
-<br />
-<br />
-Percentage gemiddeld verbruik vs testverbruik: {dataRightMeanPercentageTestAmount}
