@@ -107,49 +107,49 @@
       <g transform="translate(100,50)">
         <path d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" class="arrow" />
       </g>
-    </g>
 
-    <!-- arrow for week 1 -->
-    <path
+      <!-- arrow for week 1 -->
+      <!-- <path
       d="M {x(dataRight[0].name) + barWidthRight / 2}
       {y(dataRight[0].value) - 5} C 270 200 270 270 290 170"
       class="arrow" />
     <g transform="translate(230,170) rotate(-80 -5 -5)">
       <path class="arrow" d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" />
+    </g> -->
+
+      <rect
+        class="annotation-note-bg"
+        width="400"
+        height="110"
+        x="100"
+        y="60"
+        fill="goldenrod"
+        fill-opacity="0.2" />
+
+      <!-- TODO: refactor superflous annotation-* classes and positioning -->
+      <g class="annotation-note-content" transform="translate({width / 2}, 86)">
+        <text class="annotation-icon">
+          <tspan x="-20" dy="-5">⚡</tspan>
+        </text>
+        <text class="annotation-icon-status">
+          <tspan x="-3" dy="-22">❌</tspan>
+        </text>
+        <text class="annotation-icon-status">
+          <tspan x="-3" dy="-22">✅</tspan>
+        </text>
+        <text class="annotation-note-title" dx="0" y="30">
+          <tspan x="0" dy="-20">Mooi op schema. Ga zo door!</tspan>
+        </text>
+        <text class="annotation-note-label" dx="0" y="30">
+          <tspan x="0" dy="20">
+            Jullie zitten nu 7% onder jullie gebruik van vorig jaar.
+          </tspan>
+        </text>
+        <text class="annotation-note-label" dx="0" y="30">
+          <tspan x="0" dy="40">In Week 2 gebruikten jullie 5% minder.</tspan>
+        </text>
+      </g>
     </g>
-
-    <rect
-      class="annotation-note-bg"
-      width="400"
-      height="110"
-      x="100"
-      y="60"
-      fill="goldenrod"
-      fill-opacity="0.2" />
-
-    <g class="annotation-note-content" transform="translate({width / 2}, 86)">
-      <text class="annotation-icon">
-        <tspan x="-20" dy="-5">⚡</tspan>
-      </text>
-      <text class="annotation-icon-status">
-        <tspan x="-3" dy="-22">❌</tspan>
-      </text>
-      <text class="annotation-icon-status">
-        <tspan x="-3" dy="-22">✅</tspan>
-      </text>
-      <text class="annotation-note-title" dx="0" y="30">
-        <tspan x="0" dy="-20">Mooi op schema. Ga zo door!</tspan>
-      </text>
-      <text class="annotation-note-label" dx="0" y="30">
-        <tspan x="0" dy="20">
-          Jullie zitten nu 7% onder jullie gebruik van vorig jaar.
-        </tspan>
-      </text>
-      <text class="annotation-note-label" dx="0" y="30">
-        <tspan x="0" dy="40">In Week 2 gebruikten jullie 5% minder.</tspan>
-      </text>
-    </g>
-
     <!-- bars -->
     <g class="bars">
       {#each dataLeft as dataPoint, i}
@@ -203,11 +203,12 @@
     </g>
   </svg>
 
-<!-- x axis bar html labels -->
-{#each dataLeft as d}
+  <!-- x axis bar html labels -->
+  {#each dataLeft as d}
     <div
       style="position: absolute; top: {height - padding.bottom + 30}px; left: {x2(d.name)}px;
       ; width: 100px ; text-align: center">
       {d.name}
     </div>
   {/each}
+</div>
