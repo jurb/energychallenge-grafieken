@@ -82,9 +82,13 @@ body {
 .bars text {
   font-family: "AvenirNextLTW01-Medium", Helvetica, Arial;
   fill: #faf9f9;
-  font-size: 0.7em;
+  font-size: 0.65em;
   font-weight: 200;
   text-anchor: middle;
+}
+
+.heavy {
+  font-family: "Avenir LT W01 85 Heavy";
 }
 
 rect.unknown {
@@ -92,6 +96,10 @@ rect.unknown {
   stroke-dasharray: 5 2;
   fill: none;
   opacity: 0.3;
+}
+
+text.unknown {
+  fill: grey;
 }
 
 rect.weekgood {
@@ -137,13 +145,13 @@ rect.meanbad {
 }
 
 .annotation-note-label {
-  font-size: 0.9em;
+  font-size: 0.85em;
   font-family: "AvenirNextLTW01-Regular";
   text-anchor: middle;
 }
 
 .annotation-note-title {
-  font-size: 1.2em;
+  font-size: 0.95em;
   text-anchor: middle;
 }
 
@@ -152,7 +160,7 @@ rect.meanbad {
 }
 
 .annotation-icon-status {
-  font-size: 0.9em;
+  font-size: 1.4em;
 }
 
 .bars text.testweek {

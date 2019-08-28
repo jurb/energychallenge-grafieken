@@ -19,18 +19,28 @@
   const urlWeeks =
     params.get("weeks") != null ? params.get("weeks").split(",") : "";
 
-  const testWeekString = params.get("testweek");
+  const comparisonWeekShort =
+    params.get("comparisonshort") != null
+      ? params.get("comparisonshort")
+      : "verg. huishouden";
+
+  const comparisonWeekLong =
+    params.get("comparisonlong") != null
+      ? params.get("comparisonlong")
+      : "vergelijkbaar huishouden";
+
+  const kind = params.get("kind") != null ? params.get("kind") : false; // 'stroom' or 'gas'
+  const icon = kind == "stroom" ? "⚡️" : "🔥";
+  const unit = kind == "stroom" ? "kWh" : "m3";
 
   const activeBars = urlWeeks;
   const urlWeekNumber = urlData.length - 1;
 
   // Data
-  const barNamesLeft = [
-    "Week gemiddelde sep 2018",
-    "Week gemiddelde challenge"
-  ];
-
+  const barNamesLeft = ["Jullie doel", "Week gemiddelde challenge"];
   const barNamesRight = ["Week 1", "Week 2", "Week 3", "Week 4"];
+  const counts = ["eerste", "tweede", "derde", "vierde"];
+
   const testAmount = urlData[0];
   const defaultAmount = testAmount * 0.9;
 
@@ -128,27 +138,175 @@
 
       <!-- TODO: refactor superflous annotation-* classes and positioning -->
       <g class="annotation-note-content" transform="translate({width / 2}, 86)">
-        <text class="annotation-icon">
-          <tspan x="-20" dy="-5">⚡</tspan>
-        </text>
-        <text class="annotation-icon-status">
-          <tspan x="-3" dy="-22">❌</tspan>
-        </text>
-        <text class="annotation-icon-status">
-          <tspan x="-3" dy="-22">✅</tspan>
-        </text>
-        <text class="annotation-note-title" dx="0" y="30">
-          <tspan x="0" dy="-20">Mooi op schema. Ga zo door!</tspan>
-        </text>
-        <text class="annotation-note-label" dx="0" y="30">
-          <tspan x="0" dy="20">
-            Jullie zitten nu 7% onder jullie gebruik van vorig jaar.
-          </tspan>
-        </text>
-        <text class="annotation-note-label" dx="0" y="30">
-          <tspan x="0" dy="40">In Week 2 gebruikten jullie 5% minder.</tspan>
-        </text>
+
+        {#if kind == 'stroom'}
+          <text class="annotation-icon" x="-20" dy="5" style="font-size: 3.5em">
+            {icon}
+          </text>
+        {/if}
+
+        {#if kind == 'gas'}
+          <text class="annotation-icon" x="-19" dy="-20">{icon}</text>
+        {/if}
+
+        {#if urlWeekNumber == 0 && comparisonWeekShort != 'verg. huishouden'}
+          <g id="feedback" class="active">
+            <text class="annotation-note-title" dx="0" y="10">
+              Lukt het jullie om minder {kind} te gebruiken?
+            </text>
+            <text class="annotation-note-label" dx="0" y="40">
+              <tspan>
+                Jullie gaan iedere week onder het door jullie opgegeven
+              </tspan>
+            </text>
+            <text class="annotation-note-label" dx="0" y="40">
+              <tspan y="60" x="0">
+                verbruik uit {comparisonWeekLong} proberen te blijven (
+                {#if kind == 'gas'}
+                  {testAmount} m
+                  <tspan baseline-shift="super" font-size="10" dx="-3">3</tspan>
+                {/if}
+                {#if kind == 'stroom'}{testAmount} kWh&nbsp;{/if}
+                )
+                <!-- {kind} in {comparisonWeekLong} -->
+              </tspan>
+            </text>
+          </g>
+        {/if}
+
+        {#if urlWeekNumber == 0 && comparisonWeekShort == 'verg. huishouden'}
+          <g id="feedback" class="active">
+            <text class="annotation-note-title" dx="0" y="10">
+              Lukt het jullie om minder {kind} te gebruiken?
+            </text>
+            <text class="annotation-note-label" dx="0" y="40">
+              <tspan>
+                Jullie gaan iedere week onder het gemiddelde weekverbruik
+              </tspan>
+            </text>
+            <text class="annotation-note-label" dx="0" y="40">
+              <tspan y="60" x="0">
+                van een vergelijkbaar huishouden te blijven (
+                {#if kind == 'gas'}
+                  {testAmount} m
+                  <tspan baseline-shift="super" font-size="10" dx="-3">3</tspan>
+                {/if}
+                {#if kind == 'stroom'}{testAmount} kWh&nbsp;{/if}
+                )
+                <!-- {kind} in {comparisonWeekLong} -->
+              </tspan>
+            </text>
+          </g>
+        {/if}
+
+        {#if dataRightMean >= testAmount}
+          <g id="feedback" class="active">
+            <text class="annotation-icon-status" x="-5" dy="-10">❌</text>
+            <text class="annotation-note-title" dx="0" y="10">
+              {#if urlWeekNumber == 4}
+                <tspan class="heavy">Eindstand</tspan>
+                : helaas, jullie hebben het doel niet gehaald
+              {/if}
+              {#if urlWeekNumber < 4}
+                <tspan class="heavy">Tussenstand</tspan>
+                : probeer minder {kind} te gebruiken!
+              {/if}
+
+            </text>
+
+            {#if int(dataRightMean) == int(testAmount)}
+              <text class="annotation-note-label" dx="0" y="40">
+                <tspan>
+                  Na de {counts[parseInt(urlWeekNumber - 1)]} week verbruiken
+                  jullie gemiddeld net zoveel
+                </tspan>
+                <tspan y="60" x="0">
+                  {kind} als jullie doel van
+                  {#if kind == 'gas'}
+                    {testAmount} m
+                    <tspan baseline-shift="super" font-size="10" dx="-3">
+                      3
+                    </tspan>
+                  {/if}
+                  {#if kind == 'stroom'}{testAmount} kWh{/if}
+                </tspan>
+              </text>
+            {:else if dataRightMean >= testAmount}
+              <text class="annotation-note-label" dx="0" y="40">
+                <tspan>
+                  Na de {counts[parseInt(urlWeekNumber - 1)]} week zit jullie
+                  gemiddelde verbruik
+                </tspan>
+                <tspan y="60" x="0">
+
+                  <tspan class="heavy">
+                    {int(dataRightMeanPercentageTestAmount * 100)}%
+                  </tspan>
+                  <tspan>
+                    boven jullie doel van
+                    {#if kind == 'gas'}
+                      {testAmount} m
+                      <tspan baseline-shift="super" font-size="10" dx="-3">
+                        3
+                      </tspan>
+                    {/if}
+                    {#if kind == 'stroom'}{testAmount} kWh{/if}
+                  </tspan>
+                </tspan>
+              </text>
+            {/if}
+          </g>
+        {/if}
+
+        {#if dataRightMean < testAmount}
+          <g id="feedback" class="active">
+            <text
+              class="annotation-icon-status"
+              x="-3"
+              dy="-13"
+              style="font-size: 1.1em">
+              ✅
+            </text>
+            <text class="annotation-note-title" dx="0" y="10">
+
+              {#if urlWeekNumber == 4}
+                <tspan class="heavy">Eindstand</tspan>
+                : Jullie hebben minder {kind} gebruikt! 🎉
+              {/if}
+              {#if urlWeekNumber < 4}
+                <tspan class="heavy">Tussenstand</tspan>
+                : zo gaat ie goed!
+              {/if}
+
+            </text>
+            <text class="annotation-note-label" dx="0" y="40">
+              <tspan>
+                Na de {counts[parseInt(urlWeekNumber - 1)]} week zit jullie
+                gemiddelde verbruik
+              </tspan>
+              <tspan y="60" x="0">
+
+                <tspan class="heavy">
+                  {int(-dataRightMeanPercentageTestAmount * 100)}%
+                </tspan>
+                <tspan>
+                  {#if kind == 'gas'}
+                    onder jullie doel van {testAmount} m
+                    <tspan baseline-shift="super" font-size="10" dx="-3">
+                      3
+                    </tspan>
+                  {/if}
+                  {#if kind == 'stroom'}
+                    onder jullie doel van {testAmount} kWh
+                  {/if}
+                </tspan>
+              </tspan>
+            </text>
+          </g>
+        {/if}
+
       </g>
+
     </g>
     <!-- bars -->
     <g class="bars">
@@ -158,12 +316,20 @@
           y={y(dataPoint.value)}
           width={barWidthLeft - 4}
           height={height - padding.bottom - y(dataPoint.value)}
-          class={i == 0 ? 'testweek' : urlWeekNumber == 0 ? 'unknown' : i == 0 ? 'testweek' : dataRightMean <= testAmount ? 'meangood' : 'meanbad'} />
+          class={i == 0 ? 'testweek' : urlWeekNumber == 0 ? 'unknown' : i == 0 ? 'testweek' : dataRightMean >= testAmount ? 'meanbad' : 'meangood'} />
         <text
-          class={urlWeekNumber == 0 ? 'unknown' : i == 0 ? 'testweek' : dataRightMean <= testAmount ? 'meangood' : 'meanbad'}
+          class={i == 0 ? 'testweek' : urlWeekNumber == 0 ? 'unknown' : dataRightMean >= testAmount ? 'meanbad' : 'meangood'}
           x={x2(dataPoint.name) + barWidthLeft / 2 - 5}
           y={y(dataPoint.value) + 35}>
-          {urlWeekNumber > 0 || i == 0 ? `${int(dataPoint.value)} kWh` : '?'}
+
+          {#if urlWeekNumber == 0 && i == 1}
+            ?
+          {:else if kind == 'gas'}
+            {int(dataPoint.value)} m
+            <tspan baseline-shift="super" font-size="8" dx="-2">3</tspan>
+          {:else if kind == 'stroom'}{int(dataPoint.value)} kWh{/if}
+
+          <!-- {urlWeekNumber > 0 || i == 0 ? `${int(dataPoint.value)} kWh` : '?'} -->
         </text>
       {/each}
       {#each dataRight as dataPoint, i}
@@ -172,12 +338,17 @@
           y={y(dataPoint.value)}
           width={barWidthRight - 4}
           height={height - padding.bottom - y(dataPoint.value)}
-          class={urlWeekNumber <= i ? 'unknown' : dataPoint.value < testAmount ? 'weekgood' : 'weekbad'} />
+          class={urlWeekNumber <= i ? 'unknown' : dataPoint.value >= testAmount ? 'weekbad' : 'weekgood'} />
         <text
-          class={urlWeekNumber <= i ? 'unknown' : dataPoint.value < testAmount ? 'weekgood' : 'weekbad'}
+          class={urlWeekNumber <= i ? 'unknown' : dataPoint.value >= testAmount ? 'weekbad' : 'weekgood'}
           x={x(dataPoint.name) + barWidthRight / 2 - 3}
           y={y(dataPoint.value) + 35}>
-          {urlWeekNumber > 0 ? `${int(dataPoint.value)} kWh` : '?'}
+          {#if i >= urlWeekNumber}
+            ?
+          {:else if kind == 'gas'}
+            {int(dataPoint.value)} m
+            <tspan baseline-shift="super" font-size="8" dx="-2">3</tspan>
+          {:else if kind == 'stroom'}{int(dataPoint.value)} kWh{/if}
         </text>
       {/each}
     </g>
@@ -204,11 +375,17 @@
   </svg>
 
   <!-- x axis bar html labels -->
-  {#each dataLeft as d}
+  {#each dataLeft as d, i}
     <div
-      style="position: absolute; top: {height - padding.bottom + 30}px; left: {x2(d.name)}px;
-      ; width: 100px ; text-align: center">
+      style="position: absolute; top: {height - padding.bottom + 30}px; left: {x2(d.name) - 4}px;
+      ; width: 105px ; text-align: center">
       {d.name}
+      {#if i == 0 && comparisonWeekShort == 'model'}
+        (verbruik vergelijkbaar huishouden)
+      {:else if i == 0 && comparisonWeekShort}
+        (naar verbruik in {comparisonWeekShort})
+      {/if}
     </div>
   {/each}
 </div>
+{testAmount} {dataRightMean} {dataRightMeanPercentageTestAmount}
