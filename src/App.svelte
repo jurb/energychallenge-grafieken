@@ -110,7 +110,9 @@
     <!-- annotations -->
     <g class="annotations-manual">
       <!-- arrow for testweek -->
-      {#if urlWeekNumber == 0}
+
+      <!-- arrow from text box to bar, hidden for now -->
+      <!-- {#if urlWeekNumber == 0}
         <path
           d="M {x2(dataLeft[0].name) + barWidthLeft / 2 - 6.2}
           {y(dataLeft[0].value) - 5} C 40 70 120 120 120 120"
@@ -120,6 +122,21 @@
           rotate(70,9,-9)">
           <path d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" class="arrow" />
         </g>
+      {/if} -->
+
+      {#if urlWeekNumber == 0}
+        <g transform="translate(45,0)">
+          <path
+            d="M 230, 220 C 230, 220, 224, 261, 162, 299"
+            class="arrow-red" />
+          <g
+            transform="translate(179,{y(dataLeft[0].value + 14)})
+            rotate(-60,0,0)">
+            <path d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" class="arrow-red" />
+          </g>
+        </g>
+        <text class="annotation-note-title" x="165" y="295">Blijf onder</text>
+        <text class="annotation-note-title" x="165" y="315">deze lijn!</text>
       {/if}
 
       {#if urlWeekNumber >= 1}
@@ -209,12 +226,12 @@
             <text class="annotation-icon-status" x="-5" dy="-10">❌</text>
             <text class="annotation-note-title" dx="0" y="10">
               {#if urlWeekNumber == 4}
-                <tspan class="heavy">Eindstand</tspan>
-                : helaas, jullie hebben het doel niet gehaald
+                <tspan class="heavy">Eindstand:</tspan>
+                helaas, jullie hebben het doel niet gehaald
               {/if}
               {#if urlWeekNumber < 4}
-                <tspan class="heavy">Tussenstand</tspan>
-                : probeer minder {kind} te gebruiken!
+                <tspan class="heavy">Tussenstand:</tspan>
+                probeer minder {kind} te gebruiken!
               {/if}
 
             </text>
@@ -276,12 +293,12 @@
             <text class="annotation-note-title" dx="0" y="10">
 
               {#if urlWeekNumber == 4}
-                <tspan class="heavy">Eindstand</tspan>
-                : Jullie hebben minder {kind} gebruikt! 🎉
+                <tspan class="heavy">Eindstand:</tspan>
+                jullie hebben minder {kind} gebruikt! 🎉
               {/if}
               {#if urlWeekNumber < 4}
-                <tspan class="heavy">Tussenstand</tspan>
-                : zo gaat ie goed!
+                <tspan class="heavy">Tussenstand:</tspan>
+                zo gaat ie goed!
               {/if}
 
             </text>
@@ -384,15 +401,20 @@
   {#each dataLeft as d, i}
     <div
       style="position: absolute; top: {height - padding.bottom + 30}px; left: {x2(d.name) - 4}px;
-      ; width: 105px ; text-align: center">
+      ; width: 105px ; text-align: center"
+      class:challenge-bar={i == 1}>
       {d.name}
-      {#if i == 0 && comparisonWeekShort == 'model'}
-        (verbruik vergelijkbaar huishouden)
-      {:else if i == 0 && comparisonWeekShort}
-        (naar verbruik in {comparisonWeekShort})
-      {/if}
+      <div style="font-size: .75em">
+        {#if i == 0 && comparisonWeekShort == 'model'}
+          (verbruik vergelijkbaar huishouden)
+        {:else if i == 0 && comparisonWeekShort}
+          (naar verbruik in {comparisonWeekShort})
+        {/if}
+      </div>
     </div>
   {/each}
 </div>
 <!-- {testAmount} {dataRightMean} {dataRightMeanPercentageTestAmount} -->
 <!-- comparisonshort: {comparisonWeekShort} {y(110)} -->
+{y(dataLeft[0].value)} M 229 {y(dataLeft[0].value - 2)} C 230 220 230 220 180
+310
