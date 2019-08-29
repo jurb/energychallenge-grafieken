@@ -109,23 +109,30 @@
 
     <!-- annotations -->
     <g class="annotations-manual">
-
       <!-- arrow for testweek -->
-      <path
-        d="M 100 {y(dataLeft[0].value) - 5} C 40 100 100 110 100 110"
-        class="arrow" />
-      <g transform="translate(100,50)">
-        <path d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" class="arrow" />
-      </g>
+      {#if urlWeekNumber == 0}
+        <path
+          d="M {x2(dataLeft[0].name) + barWidthLeft / 2 - 6.2}
+          {y(dataLeft[0].value) - 5} C 40 70 120 120 120 120"
+          class="arrow" />
+        <g
+          transform="translate(139.6,{y(dataLeft[0].value) - 10.5})
+          rotate(70,9,-9)">
+          <path d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" class="arrow" />
+        </g>
+      {/if}
 
-      <!-- arrow for week 1 -->
-      <!-- <path
-      d="M {x(dataRight[0].name) + barWidthRight / 2}
-      {y(dataRight[0].value) - 5} C 270 200 270 270 290 170"
-      class="arrow" />
-    <g transform="translate(230,170) rotate(-80 -5 -5)">
-      <path class="arrow" d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" />
-    </g> -->
+      {#if urlWeekNumber >= 1}
+        <path
+          d="M {x2(dataLeft[1].name) + barWidthLeft / 2 - 3}
+          {y(dataLeft[1].value) - 5} C 210 210 210 210 {x2(dataLeft[1].name) + barWidthLeft / 2}
+          170"
+          class="arrow" />
+        <g
+          transform="translate(270.6,{y(dataLeft[1].value) + 0}) rotate(95,0,0)">
+          <path d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" class="arrow" />
+        </g>
+      {/if}
 
       <rect
         class="annotation-note-bg"
@@ -161,13 +168,14 @@
             </text>
             <text class="annotation-note-label" dx="0" y="40">
               <tspan y="60" x="0">
-                verbruik uit {comparisonWeekLong} proberen te blijven (
+                verbruik uit {comparisonWeekLong} proberen te blijven
                 {#if kind == 'gas'}
-                  {testAmount} m
+                  ({testAmount} m
                   <tspan baseline-shift="super" font-size="10" dx="-3">3</tspan>
+                  <tspan>)</tspan>
                 {/if}
-                {#if kind == 'stroom'}{testAmount} kWh&nbsp;{/if}
-                )
+                {#if kind == 'stroom'}({testAmount} kWh){/if}
+
                 <!-- {kind} in {comparisonWeekLong} -->
               </tspan>
             </text>
@@ -180,20 +188,17 @@
               Lukt het jullie om minder {kind} te gebruiken?
             </text>
             <text class="annotation-note-label" dx="0" y="40">
-              <tspan>
-                Jullie gaan iedere week onder het gemiddelde weekverbruik
-              </tspan>
+              <tspan>Probeer iedere week onder het weekverbruik van een</tspan>
             </text>
             <text class="annotation-note-label" dx="0" y="40">
               <tspan y="60" x="0">
-                van een vergelijkbaar huishouden te blijven (
+                vergelijkbaar huishouden proberen te blijven
                 {#if kind == 'gas'}
-                  {testAmount} m
+                  ({testAmount} m
                   <tspan baseline-shift="super" font-size="10" dx="-3">3</tspan>
+                  <tspan>)</tspan>
                 {/if}
-                {#if kind == 'stroom'}{testAmount} kWh&nbsp;{/if}
-                )
-                <!-- {kind} in {comparisonWeekLong} -->
+                {#if kind == 'stroom'}({testAmount} kWh){/if}
               </tspan>
             </text>
           </g>
@@ -223,12 +228,13 @@
                 <tspan y="60" x="0">
                   {kind} als jullie doel van
                   {#if kind == 'gas'}
-                    {testAmount} m
+                    ({testAmount} m
                     <tspan baseline-shift="super" font-size="10" dx="-3">
                       3
                     </tspan>
+                    <tspan>)</tspan>
                   {/if}
-                  {#if kind == 'stroom'}{testAmount} kWh{/if}
+                  {#if kind == 'stroom'}({testAmount} kWh){/if}
                 </tspan>
               </text>
             {:else if dataRightMean >= testAmount}
@@ -388,4 +394,5 @@
     </div>
   {/each}
 </div>
-{testAmount} {dataRightMean} {dataRightMeanPercentageTestAmount}
+<!-- {testAmount} {dataRightMean} {dataRightMeanPercentageTestAmount} -->
+<!-- comparisonshort: {comparisonWeekShort} {y(110)} -->
