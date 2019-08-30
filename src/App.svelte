@@ -384,4 +384,3 @@
     </div>
   {/each}
 </div>
-{y(dataLeft[0].value + 14)}
