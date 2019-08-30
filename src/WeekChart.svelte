@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte";
   import { scaleLinear, scaleBand } from "d3-scale";
   import { ticks, max, sum, mean } from "d3-array";
   import { select } from "d3-selection";
@@ -97,21 +96,8 @@
 
     <!-- annotations -->
     <g class="annotations-manual">
+
       <!-- arrow for testweek -->
-
-      <!-- arrow from text box to bar, hidden for now -->
-      <!-- {#if urlWeekNumber == 0}
-        <path
-          d="M {x2(dataLeft[0].name) + barWidthLeft / 2 - 6.2}
-          {y(dataLeft[0].value) - 5} C 40 70 120 120 120 120"
-          class="arrow" />
-        <g
-          transform="translate(139.6,{y(dataLeft[0].value) - 10.5})
-          rotate(70,9,-9)">
-          <path d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" class="arrow" />
-        </g>
-      {/if} -->
-
       {#if urlWeekNumber == 0}
         <g transform="translate(45,0)">
           <path
@@ -137,6 +123,7 @@
         </g>
       {/if}
 
+      <!-- Annotation section -->
       <rect
         class="annotation-note-bg"
         width="400"
@@ -146,19 +133,18 @@
         fill="goldenrod"
         fill-opacity="0.2" />
 
-      <!-- TODO: refactor superflous annotation-* classes and positioning -->
+      <!--  Icon block -->
       <g class="annotation-note-content" transform="translate({width / 2}, 86)">
-
         {#if kind == 'stroom'}
           <text class="annotation-icon" x="-20" dy="5" style="font-size: 3.5em">
             {icon}
           </text>
         {/if}
-
         {#if kind == 'gas'}
           <text class="annotation-icon" x="-19" dy="-20">{icon}</text>
         {/if}
 
+        <!-- Week 0 logic -->
         {#if urlWeekNumber == 0}
           <g id="feedback" class="active">
             <text class="annotation-note-title" dx="0" y="10">
@@ -183,6 +169,7 @@
           </g>
         {/if}
 
+        <!-- Title when things are going bad -->
         {#if dataRightMean >= testAmount}
           <g id="feedback" class="active">
             <text class="annotation-icon-status" x="-5" dy="-10">❌</text>
@@ -195,17 +182,16 @@
                 <tspan class="heavy">Tussenstand:</tspan>
                 probeer minder {kind} te gebruiken!
               {/if}
-
             </text>
-
-            {#if dataRightMean == testAmount}
+            <!-- When things are going meh -->
+            {#if parseInt(dataRightMeanPercentageTestAmount * 100) == 0}
               <text class="annotation-note-label" dx="0" y="40">
                 <tspan>
                   Na de {counts[parseInt(urlWeekNumber - 1)]} week verbruiken
-                  jullie gemiddeld net zoveel
+                  jullie per week
                 </tspan>
                 <tspan y="60" x="0">
-                  {kind} als jullie doel van
+                  gemiddeld net zoveel {kind} als jullie doel van
                   {#if kind == 'gas'}
                     {nlformat(testAmount)} m
                     <tspan baseline-shift="super" font-size="10" dx="-3">
@@ -219,31 +205,36 @@
             {:else if dataRightMean >= testAmount}
               <text class="annotation-note-label" dx="0" y="40">
                 <tspan>
-                  Na de {counts[parseInt(urlWeekNumber - 1)]} week zit jullie
-                  gemiddelde verbruik
+                  Na de {counts[parseInt(urlWeekNumber - 1)]} week is jullie
+                  weekgemiddelde
+                  {#if kind == 'gas'}
+                    {nlformat(dataRightMean)}m
+                    <tspan baseline-shift="super" font-size="10" dx="-3">
+                      3
+                    </tspan>
+                    <tspan dx="-3">.</tspan>
+                  {/if}
+                  {#if kind == 'stroom'}{nlformat(dataRightMean)} kWh.{/if}
+
                 </tspan>
                 <tspan y="60" x="0">
 
-                  <tspan class="heavy">
-                    {int(dataRightMeanPercentageTestAmount * 100)}%
-                  </tspan>
                   <tspan>
-                    boven jullie doel van
-                    {#if kind == 'gas'}
-                      {nlformat(testAmount)} m
-                      <tspan baseline-shift="super" font-size="10" dx="-3">
-                        3
-                      </tspan>
-                    {/if}
-                    {#if kind == 'stroom'}{nlformat(testAmount)} kWh{/if}
+                    <tspan dx="-5" />
+                    Dat is een stijging van
+                    <tspan class="heavy">
+                      {int(dataRightMeanPercentageTestAmount * 100)}%
+                    </tspan>
+                    <tspan dx="-3">.</tspan>
                   </tspan>
-                  <tspan>.</tspan>
+
                 </tspan>
               </text>
             {/if}
           </g>
         {/if}
 
+        <!-- When things are going gooood -->
         {#if dataRightMean < testAmount}
           <g id="feedback" class="active">
             <text
@@ -267,26 +258,25 @@
             </text>
             <text class="annotation-note-label" dx="0" y="40">
               <tspan>
-                Na de {counts[parseInt(urlWeekNumber - 1)]} week zit jullie
-                gemiddelde verbruik
+                Na de {counts[parseInt(urlWeekNumber - 1)]} week is jullie
+                weekgemiddelde
+                {#if kind == 'gas'}
+                  {nlformat(dataRightMean)}m
+                  <tspan baseline-shift="super" font-size="10" dx="-3">3</tspan>
+                {/if}
+                {#if kind == 'stroom'}{nlformat(dataRightMean)} kWh{/if}
+                <tspan dx="-4">.</tspan>
               </tspan>
               <tspan y="60" x="0">
 
-                <tspan class="heavy">
-                  {int(-dataRightMeanPercentageTestAmount * 100)}%
-                </tspan>
                 <tspan>
-                  {#if kind == 'gas'}
-                    onder jullie doel van {nlformat(testAmount)} m
-                    <tspan baseline-shift="super" font-size="10" dx="-3">
-                      3
-                    </tspan>
-                  {/if}
-                  {#if kind == 'stroom'}
-                    onder jullie doel van {nlformat(testAmount)} kWh
-                  {/if}
+                  <tspan dx="-5" />
+                  Dat is een bezuiniging van
+                  <tspan class="heavy">
+                    {int(-dataRightMeanPercentageTestAmount * 100)}%
+                  </tspan>
+                  <tspan dx="-3">, goed gedaan!</tspan>
                 </tspan>
-                <tspan>.</tspan>
 
               </tspan>
             </text>
@@ -316,8 +306,6 @@
             {nlformat(dataPoint.value)} m
             <tspan baseline-shift="super" font-size="8" dx="-2">3</tspan>
           {:else if kind == 'stroom'}{nlformat(dataPoint.value)} kWh{/if}
-
-          <!-- {urlWeekNumber > 0 || i == 0 ? `${int(dataPoint.value)} kWh` : '?'} -->
         </text>
       {/each}
       {#each dataRight as dataPoint, i}
@@ -379,3 +367,4 @@
 </div>
 
 <h3>{gezin}</h3>
+{parseInt(dataRightMeanPercentageTestAmount * 100)}
