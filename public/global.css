@@ -61,6 +61,11 @@ body {
     sans-serif;
 }
 
+h1 {
+  font-family: "Avenir LT W01 85 Heavy";
+  /* text-align: center; */
+}
+
 .chart {
   width: 100%;
   margin: 0 auto;

@@ -8,6 +8,7 @@
 
   // Helpers
   const int = format(",.0f");
+  const float1 = format(",.1f");
 
   // URL paramater parsing and settings
   const params = new URLSearchParams(window.location.search);
@@ -27,6 +28,8 @@
   const kind = params.get("kind") != null ? params.get("kind") : false; // 'stroom' or 'gas'
   const icon = kind == "stroom" ? "⚡️" : "🔥";
   const unit = kind == "stroom" ? "kWh" : "m3";
+  const gezin =
+    params.get("gezin") != null ? params.get("gezin") : "Gezin niet bekend";
 
   const activeBars = urlWeeks;
   const urlWeekNumber = urlData.length - 1;
@@ -103,6 +106,7 @@
 </style>
 
 <div style="width: {width}; height: {height}">
+
   <svg id="svg">
 
     <!-- annotations -->
@@ -208,7 +212,7 @@
 
             </text>
 
-            {#if int(dataRightMean) == int(testAmount)}
+            {#if dataRightMean == testAmount}
               <text class="annotation-note-label" dx="0" y="40">
                 <tspan>
                   Na de {counts[parseInt(urlWeekNumber - 1)]} week verbruiken
@@ -320,7 +324,7 @@
           {#if urlWeekNumber == 0 && i == 1}
             ?
           {:else if kind == 'gas'}
-            {int(dataPoint.value)} m
+            {float1(dataPoint.value)} m
             <tspan baseline-shift="super" font-size="8" dx="-2">3</tspan>
           {:else if kind == 'stroom'}{int(dataPoint.value)} kWh{/if}
 
@@ -341,7 +345,7 @@
           {#if i >= urlWeekNumber}
             ?
           {:else if kind == 'gas'}
-            {int(dataPoint.value)} m
+            {float1(dataPoint.value)} m
             <tspan baseline-shift="super" font-size="8" dx="-2">3</tspan>
           {:else if kind == 'stroom'}{int(dataPoint.value)} kWh{/if}
         </text>
@@ -384,3 +388,5 @@
     </div>
   {/each}
 </div>
+
+<h3>{gezin}</h3>
