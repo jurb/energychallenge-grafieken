@@ -61,6 +61,13 @@ body {
     sans-serif;
 }
 
+svg {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  border: 1px solid lightgrey;
+}
+
 h1 {
   font-family: "Avenir LT W01 85 Heavy";
   /* text-align: center; */
@@ -168,7 +175,7 @@ rect.meanbad {
   font-size: 1.4em;
 }
 
-.bars text.testweek {
+.bars text.barleft {
   text-anchor: middle;
   fill: #faf9f9;
   font-size: 0.9em;
