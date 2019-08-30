@@ -127,9 +127,7 @@
           <path
             d="M 229.5, 247 C 230, 250, 224, 290, 162, 320"
             class="arrow-red" />
-          <g
-            transform="translate(179,{y(dataLeft[0].value + 14)})
-            rotate(-60,0,0)">
+          <g transform="translate(179,215.7) rotate(-60,0,0)">
             <path d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" class="arrow-red" />
           </g>
         </g>
@@ -386,3 +384,4 @@
     </div>
   {/each}
 </div>
+{y(dataLeft[0].value + 14)}
