@@ -37,7 +37,7 @@
   const urlWeekNumber = urlData.length - 1;
 
   // Data
-  const barNamesLeft = ["Jullie doel", "Week gemiddelde challenge"];
+  const barNamesLeft = ["Gemiddeld weekverbruik", "Week gemiddelde challenge"];
   const barNamesRight = ["Week 1", "Week 2", "Week 3", "Week 4"];
   const counts = ["eerste", "tweede", "derde", "vierde"];
 
@@ -64,7 +64,10 @@
 
   // Data variables
   $: dataSum = sum(dataLeft, d => d.value);
-  $: dataMax = max(dataRight, d => d.value); // this has to be the max of all data, also left
+  $: dataMax = max(
+    [max(dataRight, d => d.value), max(dataLeft, d => d.value)],
+    d => d
+  ); // this has to be the max of all data, also left
   $: dataRightMean = mean(urlData.slice(1), d => d);
   $: dataRightMeanPercentageTestAmount = 1 - testAmount / dataRightMean;
 
@@ -127,7 +130,7 @@
       {#if urlWeekNumber == 0}
         <g transform="translate(45,0)">
           <path
-            d="M 230, 220 C 230, 220, 224, 261, 162, 299"
+            d="M 229.5, 247 C 230, 250, 224, 290, 162, 320"
             class="arrow-red" />
           <g
             transform="translate(179,{y(dataLeft[0].value + 14)})
@@ -135,8 +138,8 @@
             <path d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" class="arrow-red" />
           </g>
         </g>
-        <text class="annotation-note-title" x="165" y="295">Blijf onder</text>
-        <text class="annotation-note-title" x="165" y="315">deze lijn!</text>
+        <text class="annotation-note-title" x="165" y="310">Blijf onder</text>
+        <text class="annotation-note-title" x="165" y="330">deze lijn!</text>
       {/if}
 
       {#if urlWeekNumber >= 1}
@@ -173,49 +176,26 @@
           <text class="annotation-icon" x="-19" dy="-20">{icon}</text>
         {/if}
 
-        {#if urlWeekNumber == 0 && comparisonWeekShort != 'verg. huishouden'}
+        {#if urlWeekNumber == 0}
           <g id="feedback" class="active">
             <text class="annotation-note-title" dx="0" y="10">
-              Lukt het jullie om minder {kind} te gebruiken?
+              Lukt het jullie om minder {kind} te verbruiken?
             </text>
             <text class="annotation-note-label" dx="0" y="40">
               <tspan>
-                Jullie gaan iedere week onder het door jullie opgegeven
+                Jullie doel is om aan het eind van de challenge een lager
               </tspan>
             </text>
             <text class="annotation-note-label" dx="0" y="40">
               <tspan y="60" x="0">
-                verbruik uit {comparisonWeekLong} proberen te blijven
+                gemiddeld weekverbruik te hebben dan
                 {#if kind == 'gas'}
-                  ({testAmount} m
+                  {testAmount} m
                   <tspan baseline-shift="super" font-size="10" dx="-3">3</tspan>
-                  <tspan>)</tspan>
                 {/if}
-                {#if kind == 'stroom'}({testAmount} kWh){/if}
-
+                {#if kind == 'stroom'}{testAmount} kWh{/if}
+                <tspan>.</tspan>
                 <!-- {kind} in {comparisonWeekLong} -->
-              </tspan>
-            </text>
-          </g>
-        {/if}
-
-        {#if urlWeekNumber == 0 && comparisonWeekShort == 'verg. huishouden'}
-          <g id="feedback" class="active">
-            <text class="annotation-note-title" dx="0" y="10">
-              Lukt het jullie om minder {kind} te gebruiken?
-            </text>
-            <text class="annotation-note-label" dx="0" y="40">
-              <tspan>Probeer iedere week onder het weekverbruik van een</tspan>
-            </text>
-            <text class="annotation-note-label" dx="0" y="40">
-              <tspan y="60" x="0">
-                vergelijkbaar huishouden proberen te blijven
-                {#if kind == 'gas'}
-                  ({testAmount} m
-                  <tspan baseline-shift="super" font-size="10" dx="-3">3</tspan>
-                  <tspan>)</tspan>
-                {/if}
-                {#if kind == 'stroom'}({testAmount} kWh){/if}
               </tspan>
             </text>
           </g>
@@ -406,15 +386,9 @@
       {d.name}
       <div style="font-size: .75em">
         {#if i == 0 && comparisonWeekShort == 'model'}
-          (verbruik vergelijkbaar huishouden)
-        {:else if i == 0 && comparisonWeekShort}
-          (naar verbruik in {comparisonWeekShort})
-        {/if}
+          vergelijkbaar huishouden
+        {:else if i == 0 && comparisonWeekShort}{comparisonWeekShort}{/if}
       </div>
     </div>
   {/each}
 </div>
-<!-- {testAmount} {dataRightMean} {dataRightMeanPercentageTestAmount} -->
-<!-- comparisonshort: {comparisonWeekShort} {y(110)} -->
-{y(dataLeft[0].value)} M 229 {y(dataLeft[0].value - 2)} C 230 220 230 220 180
-310

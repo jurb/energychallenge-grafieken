@@ -166,6 +166,7 @@ rect.meanbad {
 .bars text.testweek {
   text-anchor: middle;
   fill: #faf9f9;
+  font-size: 0.9em;
 }
 
 .arrow {
