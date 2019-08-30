@@ -24,11 +24,6 @@
       ? params.get("comparisonshort")
       : "verg. huishouden";
 
-  const comparisonWeekLong =
-    params.get("comparisonlong") != null
-      ? params.get("comparisonlong")
-      : "vergelijkbaar huishouden";
-
   const kind = params.get("kind") != null ? params.get("kind") : false; // 'stroom' or 'gas'
   const icon = kind == "stroom" ? "⚡️" : "🔥";
   const unit = kind == "stroom" ? "kWh" : "m3";
@@ -195,7 +190,6 @@
                 {/if}
                 {#if kind == 'stroom'}{testAmount} kWh{/if}
                 <tspan>.</tspan>
-                <!-- {kind} in {comparisonWeekLong} -->
               </tspan>
             </text>
           </g>
