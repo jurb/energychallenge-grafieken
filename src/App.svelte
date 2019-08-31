@@ -1,5 +1,6 @@
 <script>
   import WeekChart from "./WeekChart.svelte";
+  import DayChart from "./DayChart.svelte";
 
   // Data parameters
   const params = new URLSearchParams(window.location.search);
@@ -23,3 +24,5 @@
 {#if chartType == 'weeklyupdate'}
   <WeekChart {urlData} {urlWeeks} {comparisonWeekShort} {gezin} {kind} />
 {/if}
+
+<DayChart {urlData} {gezin} {kind} />

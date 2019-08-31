@@ -367,4 +367,3 @@
 </div>
 
 <h3>{gezin}</h3>
-{parseInt(dataRightMeanPercentageTestAmount * 100)}
