@@ -25,4 +25,4 @@
   <WeekChart {urlData} {urlWeeks} {comparisonWeekShort} {gezin} {kind} />
 {/if}
 
-<DayChart {urlData} {gezin} {kind} />
+<!-- <DayChart {urlData} {gezin} {kind} /> -->
