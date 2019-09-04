@@ -202,6 +202,7 @@
                 </tspan>
                 <tspan>.</tspan>
               </text>
+              <!-- When things are going bad -->
             {:else if dataRightMean >= testAmount}
               <text class="annotation-note-label" dx="0" y="40">
                 <tspan>
@@ -215,19 +216,17 @@
                     <tspan dx="-3">.</tspan>
                   {/if}
                   {#if kind == 'stroom'}{nlformat(dataRightMean)} kWh.{/if}
-
                 </tspan>
                 <tspan y="60" x="0">
-
                   <tspan>
                     <tspan dx="-5" />
-                    Dat is een stijging van
+                    Dat is
                     <tspan class="heavy">
                       {int(dataRightMeanPercentageTestAmount * 100)}%
                     </tspan>
+                    &nbsp;boven jullie doel
                     <tspan dx="-3">.</tspan>
                   </tspan>
-
                 </tspan>
               </text>
             {/if}
@@ -271,11 +270,13 @@
 
                 <tspan>
                   <tspan dx="-5" />
-                  Dat is een bezuiniging van
+                  Dat is
                   <tspan class="heavy">
                     {nlformat(-dataRightMeanPercentageTestAmount * 100)}%
                   </tspan>
-                  <tspan dx="-3">, goed gedaan!</tspan>
+                  <tspan dx="-3">
+                    &nbsp;beter dan jullie doel, goed gedaan!
+                  </tspan>
                 </tspan>
 
               </tspan>
