@@ -74,7 +74,7 @@
   $: y = scaleLinear()
     .domain([0, dataMax])
     // .nice(5)
-    .range([height - padding.bottom - 25, padding.top]); // Bars have a min height of 25px, for labels
+    .range([height - padding.bottom - 30, padding.top]); // Bars have a min height of 25px, for labels
 
   // $: yTicks = y.ticks(5);
   $: barWidthLeft = x2.bandwidth();
@@ -248,7 +248,7 @@
 
               {#if urlWeekNumber == 4}
                 <tspan class="heavy">Eindstand:</tspan>
-                jullie hebben minder {kind} gebruikt! 🎉
+                jullie hebben minder {kind} verbruikt! 🎉
               {/if}
               {#if urlWeekNumber < 4}
                 <tspan class="heavy">Tussenstand:</tspan>
@@ -273,7 +273,7 @@
                   <tspan dx="-5" />
                   Dat is een bezuiniging van
                   <tspan class="heavy">
-                    {int(-dataRightMeanPercentageTestAmount * 100)}%
+                    {nlformat(-dataRightMeanPercentageTestAmount * 100)}%
                   </tspan>
                   <tspan dx="-3">, goed gedaan!</tspan>
                 </tspan>
@@ -298,7 +298,7 @@
         <text
           class={i == 0 ? 'testweek barleft' : urlWeekNumber == 0 ? 'unknown' : dataRightMean >= testAmount ? 'meanbad barleft' : 'meangood barleft'}
           x={x2(dataPoint.name) + barWidthLeft / 2 - 5}
-          y={y(dataPoint.value) + 35}>
+          y={y(dataPoint.value) + 25}>
 
           {#if urlWeekNumber == 0 && i == 1}
             ?
@@ -318,7 +318,7 @@
         <text
           class={urlWeekNumber <= i ? 'unknown' : dataPoint.value >= testAmount ? 'weekbad' : 'weekgood'}
           x={x(dataPoint.name) + barWidthRight / 2 - 3}
-          y={y(dataPoint.value) + 35}>
+          y={y(dataPoint.value) + 20}>
           {#if i >= urlWeekNumber}
             ?
           {:else if kind == 'gas'}
