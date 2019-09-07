@@ -91,6 +91,10 @@ h1 {
   text-anchor: middle;
 }
 
+.ytick text {
+  text-anchor: start;
+}
+
 .bars text {
   font-family: "AvenirNextLTW01-Medium", Helvetica, Arial;
   fill: #faf9f9;
