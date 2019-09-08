@@ -57,7 +57,7 @@
     d => d
   ); // this has to be the max of all data, also left
   $: dataRightMean = mean(urlData.slice(1), d => d);
-  $: dataRightMeanPercentageTestAmount = 1 - testAmount / dataRightMean;
+  $: dataRightMeanPercentageTestAmount = -(1 - dataRightMean / testAmount);
 
   // Scales
   $: x = scaleBand()
@@ -275,7 +275,7 @@
                     {nlformat(-dataRightMeanPercentageTestAmount * 100)}%
                   </tspan>
                   <tspan dx="-3">
-                    &nbsp;beter dan jullie doel, goed gedaan!
+                    &nbsp;minder dan jullie doel, goed gedaan!
                   </tspan>
                 </tspan>
 
