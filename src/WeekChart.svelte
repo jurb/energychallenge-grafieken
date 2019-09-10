@@ -345,7 +345,7 @@
       <g
         class="tick"
         transform="translate(0, {y(testAmount) - padding.top + 1})">
-        <line x1={x2(dataLeft[0].name) + barWidthLeft} x2={width} />
+        <line class="weekline" x1={x2(dataLeft[0].name) + barWidthLeft} x2={width} />
       </g>
     </g>
   </svg>

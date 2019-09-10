@@ -25,6 +25,9 @@
 
   const chartType =
     params.get("charttype") != null ? params.get("charttype") : "weeklyupdate"; // 'weeklyupdate', 'piek'
+
+  const date =
+    params.get("date") != null ? params.get("date") : "geen datum gegeven"; // 'weeklyupdate', 'piek'
 </script>
 
 {#if chartType == 'weeklyupdate'}
@@ -32,5 +35,5 @@
 {/if}
 
 {#if chartType == 'daychart'}
-  <DayChart {urlData} {gezin} {kind} />
+  <DayChart {urlData} {gezin} {kind} {date} />
 {/if}
