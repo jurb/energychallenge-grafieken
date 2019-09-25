@@ -97,6 +97,10 @@ h1 {
   text-anchor: middle;
 }
 
+.smaller text {
+  font-size: 0.65em;
+}
+
 .ytick text {
   text-anchor: start;
 }
@@ -144,6 +148,24 @@ rect.testweek {
   fill: #ab9c9c;
   stroke: none;
   opacity: 0.65;
+}
+
+rect.endchart2left {
+  fill: #11bb11;
+  stroke: none;
+  opacity: 0.75;
+}
+
+rect.endchart2rightgas {
+  fill: #d46b6b;
+  stroke: none;
+  opacity: 0.55;
+}
+
+rect.endchart2rightstroom {
+  fill: #39b1fc;
+  stroke: none;
+  opacity: 0.55;
 }
 
 rect.daybar {

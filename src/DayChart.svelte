@@ -43,7 +43,19 @@
     .range([height - padding.bottom, padding.top])
     .nice();
 
+  $: yGasFixed = scaleLinear()
+    .domain([0, 0.7])
+    .range([height - padding.bottom, padding.top])
+    .nice();
+
+  $: yElekFixed = scaleLinear()
+    .domain([0, 1])
+    .range([height - padding.bottom, padding.top])
+    .nice();
+
   $: yTicks = y.ticks(6);
+  $: yTicksGasFixed = yElekFixed.ticks(6);
+
   $: barWidth = x.bandwidth();
 
   // Settings
@@ -120,11 +132,11 @@
       {#each data as dataPoint, i}
         <rect
           x={x(i)}
-          y={y(dataPoint)}
+          y={yElekFixed(dataPoint)}
           width={kind === 'gas' ? 16 : 4}
-          height={height - padding.bottom - y(dataPoint)}
+          height={height - padding.bottom - yElekFixed(dataPoint)}
           class="daybar" />
-        <!-- <text x={x(i) + barWidth / 2 - 5} y={y(dataPoint) + 35}>
+        <!-- <text x={x(i) + barWidth / 2 - 5} y={yElekFixed(dataPoint) + 35}>
 
           {#if kind == 'gas'}
             {nlformat(dataPoint)} m
@@ -202,20 +214,20 @@
 
     </g>
     <g class="axis y-axis" transform="translate(0,{padding.top})">
-      {#each yTicks as tick, i}
+      {#each yTicksGasFixed as tick, i}
         <g
           class="tick ytick"
-          transform="translate(-20, {y(tick) - padding.top + 1})">
+          transform="translate(-20, {yElekFixed(tick) - padding.top + 1})">
           {#if i > 0}
             <line class="dayline" x1={padding.left - 10} x2={width} />
           {/if}
           <text x={padding.left - 10} y="-4">
-            {#if tick === yTicks[yTicks.length - 1] && kind == 'stroom'}
-              {tick} kWh
-            {:else if tick === yTicks[yTicks.length - 1] && kind == 'gas'}
-              {tick} m
+            {#if tick === yTicksGasFixed[yTicksGasFixed.length - 1] && kind == 'stroom'}
+              {nlformat(tick)} kWh
+            {:else if tick === yTicksGasFixed[yTicksGasFixed.length - 1] && kind == 'gas'}
+              {nlformat(tick)} m
               <tspan baseline-shift="super" font-size="10" dx="-3">3</tspan>
-            {:else}{tick}{/if}
+            {:else}{nlformat(tick)}{/if}
           </text>
 
         </g>

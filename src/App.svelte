@@ -1,5 +1,6 @@
 <script>
   import WeekChart from "./WeekChart.svelte";
+  import EndChart2 from "./EndChart2.svelte";
   import DayChart from "./DayChart.svelte";
 
   // Data parameters
@@ -32,6 +33,10 @@
 
 {#if chartType == 'weeklyupdate'}
   <WeekChart {urlData} {urlWeeks} {comparisonWeekShort} {gezin} {kind} />
+{/if}
+
+{#if chartType == 'endchart2'}
+  <EndChart2 {urlData} {urlWeeks} {comparisonWeekShort} {gezin} {kind} />
 {/if}
 
 {#if chartType == 'daychart'}
