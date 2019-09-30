@@ -26,7 +26,13 @@
 
   // Data
   const barNamesLeft = ["Gemiddeld weekverbruik", "Week gemiddelde challenge"];
-  const barNamesRight = ["1", "2", "3", "4", "5"];
+  const barNamesRight = [
+    "1-persoons",
+    "2-persoons",
+    "3-persoons",
+    "4-persoons",
+    "5-persoons"
+  ];
   const huishoudenType = [
     "flat",
     "tussenwoning",
@@ -121,10 +127,11 @@
         </g>
         <text class="annotation-note-title" x="165" y="310">Blijf onder</text>
         <text class="annotation-note-title" x="165" y="330">deze lijn!</text> -->
-
-      <path d="M 145 320 C 180 317.1 180 317.1 229 317.1" class="arrow" />
-      <g transform="translate(230,257) rotate(0,0,0)">
-        <path d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" class="arrow" />
+      <g transform="translate(0,60)">
+        <path d="M 145 320 C 180 317.1 180 317.1 229 317.1" class="arrow" />
+        <g transform="translate(230,257) rotate(0,0,0)">
+          <path d="M -9 67 c 2-3 6-4 9-7-3-1-9-3-11-6" class="arrow" />
+        </g>
       </g>
 
       <!-- Annotation section -->
@@ -149,87 +156,35 @@
         {/if}
 
         <!-- Title when things are going bad -->
-        {#if dataRightMean >= testAmount}
-          <g id="feedback" class="active">
-            <!-- <text class="annotation-icon-status" x="-5" dy="-10">❌</text> -->
-            <text class="annotation-note-title" dx="0" y="10">
-              <tspan class="heavy">Vergelijking andere huishoudens</tspan>
-            </text>
-            <text class="annotation-note-label" dx="0" y="40">
-              <tspan>
-                Bekijk hier hoe jullie {kind} verbruik zich verhoudt
-                <!-- {#if kind == 'gas'}
+        <g id="feedback" class="active">
+          <!-- <text class="annotation-icon-status" x="-5" dy="-10">❌</text> -->
+          <text class="annotation-note-title" dx="0" y="10">
+            <tspan class="heavy">Vergelijking andere huishoudens</tspan>
+          </text>
+          <text class="annotation-note-label" dx="0" y="40">
+            <tspan>
+              Bekijk hier hoe jullie {kind} verbruik zich verhoudt
+              <!-- {#if kind == 'gas'}
                   {nlformat(dataRightMean)}m
                   <tspan baseline-shift="super" font-size="10" dx="-3">3</tspan>
                   <tspan dx="-3">.</tspan>
                 {/if}
                 {#if kind == 'stroom'}{nlformat(dataRightMean)} kWh.{/if} -->
-              </tspan>
-              <tspan y="60" x="0">
-                <tspan>
-                  <tspan dx="-5" />
-                  tot andere huishoudens.
-                  <!-- <tspan class="heavy">
+            </tspan>
+            <tspan y="60" x="0">
+              <tspan>
+                <tspan dx="-5" />
+                tot andere huishoudens.
+                <!-- <tspan class="heavy">
                     {int(dataRightMeanPercentageTestAmount * 100)}%
                   </tspan>
                   &nbsp;boven jullie doel
                   <tspan dx="-3">.</tspan> -->
-                </tspan>
               </tspan>
-            </text>
-          </g>
-        {/if}
+            </tspan>
+          </text>
+        </g>
 
-        <!-- When things are going gooood -->
-        {#if dataRightMean < testAmount}
-          <g id="feedback" class="active">
-            <text
-              class="annotation-icon-status"
-              x="-3"
-              dy="-13"
-              style="font-size: 1.1em">
-              ✅
-            </text>
-            <text class="annotation-note-title" dx="0" y="10">
-
-              {#if urlWeekNumber == 4}
-                <tspan class="heavy">Eindstand:</tspan>
-                jullie hebben minder {kind} verbruikt! 🎉
-              {/if}
-              {#if urlWeekNumber < 4}
-                <tspan class="heavy">Tussenstand:</tspan>
-                zo gaat ie goed!
-              {/if}
-
-            </text>
-            <text class="annotation-note-label" dx="0" y="40">
-              <tspan>
-                Na de {counts[parseInt(urlWeekNumber - 1)]} week is jullie
-                weekgemiddelde
-                {#if kind == 'gas'}
-                  {nlformat(dataRightMean)}m
-                  <tspan baseline-shift="super" font-size="10" dx="-3">3</tspan>
-                {/if}
-                {#if kind == 'stroom'}{nlformat(dataRightMean)} kWh{/if}
-                <tspan dx="-4">.</tspan>
-              </tspan>
-              <tspan y="60" x="0">
-
-                <tspan>
-                  <tspan dx="-5" />
-                  Dat is
-                  <tspan class="heavy">
-                    {nlformat(-dataRightMeanPercentageTestAmount * 100)}%
-                  </tspan>
-                  <tspan dx="-3">
-                    &nbsp;minder dan jullie doel, goed gedaan!
-                  </tspan>
-                </tspan>
-
-              </tspan>
-            </text>
-          </g>
-        {/if}
       </g>
 
     </g>
@@ -274,17 +229,34 @@
 
     <!-- x axis bar labels -->
     <!-- TODO: just use html for all labels, like we do on dataLeft -->
-    <g class="axis x-axis">
-      {#each huishoudenType as dataPoint, i}
-        <g
-          class="tick smaller"
-          transform="translate({xHuishoudenType(dataPoint)},{height})">
-          <text x={barWidthRight / 2.15} y={-padding.bottom + 25}>
-            {dataPoint}
-          </text>
-        </g>
-      {/each}
-    </g>
+    {#if kind === 'gas'}
+      <g class="axis x-axis">
+        {#each huishoudenType as dataPoint, i}
+          <g
+            class="tick smaller"
+            transform="translate({xHuishoudenType(dataPoint)},{height})">
+            <text x={barWidthRight / 2.15} y={-padding.bottom + 25}>
+              {dataPoint}
+            </text>
+          </g>
+        {/each}
+      </g>
+    {/if}
+
+    {#if kind === 'stroom'}
+      <g class="axis x-axis">
+        {#each dataRight as dataPoint, i}
+          <g
+            class="tick smaller"
+            transform="translate({x(dataPoint.name)},{height})">
+            <text x={barWidthRight / 2.15} y={-padding.bottom + 25}>
+              {dataPoint.name}
+            </text>
+          </g>
+        {/each}
+      </g>
+    {/if}
+
     <!-- y axis line -->
     <!-- <g class="axis y-axis" transform="translate(0,{padding.top})">
       <g
@@ -312,7 +284,12 @@
     ; width: 260px ; text-align: center"
     class="challenge-bar">
     Verbruik vergelijkbare huishoudens
-    <div style="font-size: .75em">in aantal gezinsleden</div>
+    {#if kind === 'stroom'}
+      <div style="font-size: .75em">in aantal gezinsleden</div>
+    {/if}
+    {#if kind === 'gas'}
+      <div style="font-size: .75em">per type woning</div>
+    {/if}
   </div>
 
 </div>
