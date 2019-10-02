@@ -74,10 +74,7 @@ exports.bespaarData = [
     "type energierekening": "sep 2018",
     "doel elek week": 41,
     "eindverbruik elek gem week": 43.51674999999997,
-    stroom: 0.06138414634146283,
-    "doel gas week": null,
-    "eindverbruik gas gem week": null,
-    gas: null
+    stroom: 0.06138414634146283
   },
   {
     gezin: "Gezin 3",

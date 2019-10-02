@@ -3,6 +3,7 @@
   import EndChart1 from "./EndChart1.svelte";
   import EndChart2 from "./EndChart2.svelte";
   import EndChart1v2 from "./EndChart1v2.svelte";
+  import EndChart1v3 from "./EndChart1v3.svelte";
   import DayChart from "./DayChart.svelte";
 
   // Data parameters
@@ -43,6 +44,10 @@
 
 {#if chartType == 'endchart1v2'}
   <EndChart1v2 {gezin} {kind} />
+{/if}
+
+{#if chartType == 'endchart1v3'}
+  <EndChart1v3 {gezin} {kind} />
 {/if}
 
 {#if chartType == 'endchart2'}
