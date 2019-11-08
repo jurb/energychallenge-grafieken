@@ -1,6 +1,14 @@
-*Psst — looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+Graphs for the Energy Challenge prototype. Takes in data via URL parameters.
 
----
+Demo:
+
+- <https://challenge-grafieken-2019.jurian.me/?data=23&kind=stroom>
+- <https://challenge-grafieken-2019.jurian.me/?data=23,34,21,17&kind=stroom>
+- <https://challenge-grafieken-2019.jurian.me/?data=23,34,35,21,17&kind=stroom>
+- <https://challenge-grafieken-2019.jurian.me/?data=23,34,35,21,17&kind=gas>
+- <https://challenge-grafieken-2019.jurian.me/?data=23,34,35,21,17&kind=stroom>
+- <https://challenge-grafieken-2019.jurian.me/?data=23,34,35,21,17&kind=gas&charttype=endchart1v3>
+- <https://challenge-grafieken-2019.jurian.me/?data=0,0,0,0,0,0,.1,.4,.6,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0&kind=gas&charttype=daychart&date=4%20september>
 
 # svelte app
 
@@ -13,8 +21,7 @@ npx degit sveltejs/template svelte-app
 cd svelte-app
 ```
 
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
-
+_Note that you will need to have [Node.js](https://nodejs.org) installed._
 
 ## Get started
 
@@ -32,7 +39,6 @@ npm run dev
 ```
 
 Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
-
 
 ## Deploying to the web
 
