@@ -2,13 +2,13 @@ Graphs for the Energy Challenge prototype. Takes in data via URL parameters.
 
 Demo:
 
-- <https://challenge-grafieken-2019.jurian.me/?data=23&kind=stroom>
-- <https://challenge-grafieken-2019.jurian.me/?data=23,34,21,17&kind=stroom>
-- <https://challenge-grafieken-2019.jurian.me/?data=23,34,35,21,17&kind=stroom>
-- <https://challenge-grafieken-2019.jurian.me/?data=23,34,35,21,17&kind=gas>
-- <https://challenge-grafieken-2019.jurian.me/?data=23,34,35,21,17&kind=stroom>
-- <https://challenge-grafieken-2019.jurian.me/?data=23,34,35,21,17&kind=gas&charttype=endchart1v3>
-- <https://challenge-grafieken-2019.jurian.me/?data=0,0,0,0,0,0,.1,.4,.6,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0&kind=gas&charttype=daychart&date=4%20september>
+- <https://challenge-grafieken-2019.focustest.nl/?data=23&kind=stroom>
+- <https://challenge-grafieken-2019.focustest.nl/?data=23,34,21,17&kind=stroom>
+- <https://challenge-grafieken-2019.focustest.nl/?data=23,34,35,21,17&kind=stroom>
+- <https://challenge-grafieken-2019.focustest.nl/?data=23,34,35,21,17&kind=gas>
+- <https://challenge-grafieken-2019.focustest.nl/?data=23,34,35,21,17&kind=stroom>
+- <https://challenge-grafieken-2019.focustest.nl/?data=23,34,35,21,17&kind=gas&charttype=endchart1v3>
+- <https://challenge-grafieken-2019.focustest.nl/?data=0,0,0,0,0,0,.1,.4,.6,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0&kind=gas&charttype=daychart&date=4%20september>
 
 # svelte app
 
